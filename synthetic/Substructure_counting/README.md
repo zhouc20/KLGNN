@@ -17,3 +17,7 @@ CUDA_VISIBLE_DEVICES=0 python run.py --dataset 'dataset2' --task 'chordal_cycle'
 CUDA_VISIBLE_DEVICES=0 python run.py --dataset 'dataset2' --task 'tailed_triangle'      --num_layers 2 --lr 3e-3 --epochs 100 --cos_lr  --no 1 
 
 CUDA_VISIBLE_DEVICES=0 python run.py --dataset 'dataset2' --task 'star'                 --num_layers 2 --lr 3e-3 --epochs 100 --cos_lr  --no 1
+
+### datasets
+
+datasets are from: Chen, Z., Chen, L., Villar, S., & Bruna, J. (2020). Can graph neural networks count substructures? ArXiv, abs/2002.04025.
