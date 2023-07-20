@@ -149,12 +149,6 @@ processed_path = f"data/{args.dataset}_{k}_{args.distlimitl}_{args.distlimitu}_r
 if os.path.exists(processed_path):
     dataset = torch.load(processed_path, map_location="cpu")
 elif not args.no_cluster:
-    # datalist = [
-    #     graph2IDsubgraph_cluster(dat, k, max([g.x.shape[0] for g in glist]),
-    #                                 args.distlimitl, args.distlimitu, args.resolution)
-    #     for dat in glist
-    # ]
-    # dataset = DataListSet(datalist)
     dataset = PygGraphPropPredDataset(args.dataset, 'data', pre_transform=pre_transform_cluster)
     torch.save(dataset, processed_path)
 else:
@@ -168,8 +162,7 @@ train_dataset_2 = []
 train_dataset_3 = []
 train_dataset_4 = []
 train_dataset_5 = []
-# print(len(train_dataset))
-# print(train_dataset[0])
+
 for i in range(len(train_dataset)):
     if train_dataset[i].Nm == 30 and train_dataset[i].num_node > 6:
         train_dataset_1.append(i)
@@ -229,26 +222,6 @@ test_dataset_2 = test_dataset[test_dataset_2]
 test_dataset_3 = test_dataset[test_dataset_3]
 test_dataset_4 = test_dataset[test_dataset_4]
 test_dataset_5 = test_dataset[test_dataset_5]
-# for dset in [train_dataset_1, train_dataset_2, train_dataset_4, train_dataset_4, train_dataset_5, val_dataset_1, val_dataset_2, val_dataset_4, val_dataset_4, val_dataset_5, test_dataset_1, test_dataset_2, test_dataset_4, test_dataset_4, test_dataset_5]:
-#     # for i in range(len(dset)):
-#     #     Nm = dset[i].Nm
-#     #     dset[i].x = torch.cat((dset[i].x, torch.zeros((Nm - dset[i].x.shape[0], 9),
-#     #                                    dtype=dset[i].x.dtype, device=device))).unsqueeze_(0)
-#     #     adj = SparseTensor(row=dset[i].edge_index[0],
-#     #                        col=dset[i].edge_index[1],
-#     #                        value=dset[i].edge_attr,
-#     #                        sparse_sizes=(Nm, Nm)).coalesce()
-#     #     dset[i].adj = adj.to_dense().unsqueeze_(0).to(torch.long)
-#     for data in dset:
-#         Nm = data.Nm
-#         data.x = torch.cat((data.x, torch.zeros((Nm - data.x.shape[0], 9),
-#                                        dtype=data.x.dtype, device=device))).unsqueeze_(0)
-#         adj = SparseTensor(row=data.edge_index[0],
-#                            col=data.edge_index[1],
-#                            value=data.edge_attr,
-#                            sparse_sizes=(Nm, Nm)).coalesce()
-#         data.adj = adj.to_dense().unsqueeze_(0).to(torch.long)
-# print(train_dataset[0])
 
 train_curve = []
 valid_curve = []
@@ -273,35 +246,6 @@ test_dataloader_5 = PygDataloader(test_dataset_5, batch_size=1)
 
 evaluator = Evaluator(args.dataset)
 print(evaluator.name)
-# datalist = [dat for dat in dataset]
-# Nm = 0
-# N30 = 0
-# N50 = 0
-# N80 = 0
-# N100 = 0
-# N222 = 2
-# for i in range(len(datalist)):
-#     if datalist[i].x.shape[0]>Nm:
-#         Nm = datalist[i].x.shape[0]
-#     if datalist[i].x.shape[0] < 30:
-#         N30 += 1
-#     elif datalist[i].x.shape[0] < 50:
-#         N50 += 1
-#     elif datalist[i].x.shape[0] < 80:
-#         N80 += 1
-#     elif datalist[i].x.shape[0] < 100:
-#         N100 += 1
-#     else:
-#         N222 += 1
-# print(Nm)
-# print(N30, N50, N80, N100, N222)
-# processed_path = f"data/{args.dataset}_{k}_{args.distlimit}.pt"
-# if os.path.exists(processed_path):
-#     dataset = torch.load(processed_path, map_location="cpu")
-# else:
-#     datalist = [graph2IDsubgraph_global(dat, k, max([g.x.shape[0] for g in glist]), args.distlimit) for dat in glist]
-#     dataset = DataListSet(datalist)
-#     torch.save(dataset, processed_path)
 
 print(f"preprocess {int(time.time()-t1)} s", flush=True)
 print(len(dataset))
