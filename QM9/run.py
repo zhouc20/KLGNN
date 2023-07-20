@@ -2,7 +2,6 @@ import time
 import numpy as np
 import torch.nn as nn
 import torch
-# from IDMPNN import IDMPNN
 from IDMPNN_Global import IDMPNN_Global_new, IDMPNN_Global_parallel, IDMPNN_parallel_aggregate, IDMPNN_parallel_biaggregate, IDMPNN_parallel_AK
 from IDPPGN import IDPPGN
 from preprocess import graph2IDsubgraph, graph2IDsubgraph_global, graph2IDsubgraph_global_new, graph2IDsubgraph_cluster
@@ -201,14 +200,11 @@ print(f"preprocess {int(time.time()-t1)} s", flush=True)
 print(len(dataset))
 
 dataset = dataset.shuffle()
-# print(dataset.data.y[:10])
 
 tenpercent = int(len(dataset) * 0.1)
 mean = dataset.data.y[tenpercent:].mean(dim=0)
 std = dataset.data.y[tenpercent:].std(dim=0)
 dataset.data.y = (dataset.data.y - mean) / std
-# print(mean, std)
-# print(dataset.data.y[:10])
 
 test_dataset = dataset[:tenpercent]
 val_dataset = dataset[tenpercent:2 * tenpercent]
@@ -250,11 +246,6 @@ training_configurations = {
 def buildMod(base_encoder, k, hid_dim, out_dim, num_layer, num_layer_global, num_layer_id, num_layer_regression, node_pool, subgraph_pool, global_pool, rate, drop_perm, mask_value, cat, drop_ratio, dataset):
     max_nodez, max_edgez = None, None
     in_dim = 14 if args.use_pos else 11
-    # if dataset.data.x is not None:
-    #     max_nodez = torch.max(dataset.data.x) # types of atoms
-    #     in_dim = dataset.data.x.shape[-1]
-    #     print("max_nodez", max_nodez)
-    #     print("use node attr")
     if dataset.data.adj.dtype == torch.long:
         max_edgez = torch.max(dataset.data.adj) # types of edge
         print("max_edgez", max_edgez)
@@ -385,22 +376,3 @@ best_train = min(train_curve)
 print('Finished training!')
 print('Best validation score: {}'.format(valid_curve[best_val_epoch]))
 print('Test score: {}'.format(test_curve[best_val_epoch]))
-
-# np.savez(save_curve_name, train=np.array(train_curve), val=np.array(valid_curve), test=np.array(test_curve),
-#              test_for_best_val=test_curve[best_val_epoch])
-# np.savetxt(accuracy_file, np.array(test_curve))
-
-# string = 'Best validation score: ' + str(valid_curve[best_val_epoch]) + ' Test score: ' + str(test_curve[best_val_epoch])
-# mean_test_acc = np.mean(np.array(test_curve)[-10:-1])
-# fd = open(record_file, 'a+')
-# fd.write(string + '\n')
-# fd.write('mean test acc: ' + str(mean_test_acc) + '\n')
-# fd.close()
-#
-# plt.figure()
-# plt.plot(test_curve, color='b')
-# plt.xlabel('Epoch')
-# plt.ylabel('MSE')
-# plt.title('Test MSE')
-# # plt.show()
-# plt.savefig(record_path + '/Test_MSE.png')
